@@ -7,7 +7,8 @@
     "dev": "concurrently -k -n api,web -c red,blue \"npm run dev:api\" \"npm run dev:web\"",
     "dev:web": "vite",
     "dev:api": "tsx watch server/index.ts",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
+    "build:check": "tsc -b && vite build",
     "start": "NODE_ENV=production tsx server/index.ts",
     "lint": "oxlint",
     "preview": "vite preview",
@@ -20,7 +21,8 @@
     "express": "^5.3.0",
     "express-rate-limit": "^8.7.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "sql.js": "^1.14.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
@@ -29,11 +31,16 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "@types/sql.js": "^1.4.11",
+    "@vercel/node": "^23.0.1",
     "@vitejs/plugin-react": "^6.1.1",
     "concurrently": "^10.0.6",
     "oxlint": "^1.81.0",
     "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

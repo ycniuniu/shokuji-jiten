@@ -40,12 +40,46 @@ npm run dev
 
 打开 http://localhost:5173
 
-生产构建：
+生产构建（本地 Node）：
 
 ```bash
 npm run build
 NODE_ENV=production npm start
 ```
+
+## Vercel 部署
+
+在线部署目标：**Vercel**（通过 GitHub 连接）。
+
+### 架构（Vercel）
+
+| 本地 (`npm run dev`) | Vercel |
+|----------------------|--------|
+| Vite + Express (`better-sqlite3`) | 静态 `dist/` + Serverless `/api/*` |
+| Express rate-limit | Serverless 内存限流（同文案 429） |
+| `data/food.db` 只读 | 同库打进函数包（`sql.js` WASM，无原生绑定） |
+
+前端模式（长辈 / 儿童 / 成人）与 Web Speech 仍在浏览器端，无需改动。
+
+### 一键步骤
+
+1. 将本仓库推到 GitHub（需 `GH_TOKEN` 或本机 `gh auth login`）。
+2. [vercel.com/new](https://vercel.com/new) → Import 该 GitHub 仓库。
+3. Framework Preset: **Vite**；Build `npm run build`；Output `dist`（已写在 `vercel.json`）。
+4. Deploy。上线后打开 `https://<project>.vercel.app`。
+
+CLI（已登录 Vercel 时）：
+
+```bash
+npx vercel --yes
+npx vercel --prod --yes
+```
+
+配置文件：`vercel.json`（SPA rewrite、API `includeFiles` 打包 `data/food.db` + `sql.js` wasm）。
+
+### 限流说明（Vercel）
+
+Serverless 实例内存限流为 **尽力而为**（冷启动会重置计数）。文案与本地一致：`每分钟只能使用五次，超出了五次，等下一分钟再开始`。若需跨实例严格 5 次/分钟，可后续接 Upstash Redis。
 
 ## 数据管线
 
@@ -86,12 +120,13 @@ Python 依赖：`pip install -r data/scripts/requirements.txt`
 | GET | `/api/foods/:id` | 详情（限流） |
 | GET | `/api/stats` | 按国家统计（限流） |
 
-限流：`express-rate-limit`，**5 次 / 分钟 / IP**。
+限流：**5 次 / 分钟 / IP**（本地 Express；Vercel Serverless 内存桶）。
 
 ## 技术栈
 
 - Frontend: Vite + React + TypeScript
-- Backend: Express + better-sqlite3
+- Local API: Express + better-sqlite3
+- Vercel API: Serverless Functions + sql.js（只读 SQLite）
 - Data: Python (requests / pandas)
 
 ## License
