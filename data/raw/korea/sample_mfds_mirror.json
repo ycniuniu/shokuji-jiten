@@ -1,0 +1,67 @@
+[
+  {
+    "food_name": "김치",
+    "category": "채소",
+    "kcal": 19,
+    "protein": 1.1,
+    "fat": 0.2,
+    "carbs": 3.9,
+    "sodium": 498,
+    "calcium": 33,
+    "iron": 0.5,
+    "zinc": 0.2,
+    "selenium": 0.5
+  },
+  {
+    "food_name": "백미밥",
+    "category": "곡류",
+    "kcal": 130,
+    "protein": 2.4,
+    "fat": 0.3,
+    "carbs": 28.1,
+    "sodium": 1,
+    "calcium": 5,
+    "iron": 0.2,
+    "zinc": 0.4,
+    "selenium": 0
+  },
+  {
+    "food_name": "된장찌개",
+    "category": "국",
+    "kcal": 45,
+    "protein": 3.5,
+    "fat": 1.8,
+    "carbs": 4.2,
+    "sodium": 620,
+    "calcium": 40,
+    "iron": 0.8,
+    "zinc": 0.5,
+    "selenium": 2
+  },
+  {
+    "food_name": "불고기",
+    "category": "육류",
+    "kcal": 180,
+    "protein": 15,
+    "fat": 10,
+    "carbs": 8,
+    "sodium": 410,
+    "calcium": 15,
+    "iron": 1.5,
+    "zinc": 2.5,
+    "selenium": 12
+  },
+  {
+    "food_name": "비빔밥",
+    "category": "밥류",
+    "kcal": 140,
+    "protein": 6,
+    "fat": 4,
+    "carbs": 20,
+    "sodium": 420,
+    "calcium": 40,
+    "iron": 1.2,
+    "zinc": 1.0,
+    "selenium": 8
+  }
+]

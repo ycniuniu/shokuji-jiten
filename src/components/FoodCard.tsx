@@ -1,0 +1,59 @@
+import type { FoodListItem, Mode } from '../types'
+
+const COUNTRY: Record<string, string> = {
+  CN: '中国',
+  JP: '日本',
+  KR: '韩国',
+  SG: '新加坡',
+  US: '美国',
+  UK: '英国',
+  FR: '法国',
+  DE: '德国',
+}
+
+export function FoodCard({
+  food,
+  mode,
+  onOpen,
+  onSpeak,
+}: {
+  food: FoodListItem
+  mode: Mode
+  onOpen: (id: number) => void
+  onSpeak: (name: string) => void
+}) {
+  const kcal =
+    food.kcal_100g != null ? `${Math.round(food.kcal_100g)} kcal/100g` : '—'
+
+  return (
+    <article className={`food-card mode-${mode}`} onClick={() => onOpen(food.id)}>
+      <div className="food-card-image">
+        {food.image_path ? (
+          <img src={food.image_path} alt={food.name} loading="lazy" />
+        ) : (
+          <div className="food-card-placeholder" aria-hidden>
+            {mode === 'child' ? '🍎' : '食'}
+          </div>
+        )}
+      </div>
+      <div className="food-card-body">
+        <button
+          type="button"
+          className="food-name-btn"
+          onClick={(e) => {
+            e.stopPropagation()
+            onSpeak(food.name)
+          }}
+          title="朗读名称"
+        >
+          {food.name}
+        </button>
+        <p className="food-meta">
+          <span>{COUNTRY[food.source_country] || food.source_country}</span>
+          <span className="dot">·</span>
+          <span>{kcal}</span>
+        </p>
+      </div>
+    </article>
+  )
+}

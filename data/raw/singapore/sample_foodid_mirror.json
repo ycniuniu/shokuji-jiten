@@ -1,0 +1,67 @@
+[
+  {
+    "food_name": "Chicken rice",
+    "category": "Meals",
+    "kcal": 149,
+    "protein": 8.5,
+    "fat": 4.2,
+    "carbs": 18,
+    "sodium": 320,
+    "calcium": 12,
+    "iron": 0.6,
+    "zinc": 0.5,
+    "selenium": 8
+  },
+  {
+    "food_name": "Laksa",
+    "category": "Noodles",
+    "kcal": 130,
+    "protein": 6,
+    "fat": 7,
+    "carbs": 12,
+    "sodium": 480,
+    "calcium": 40,
+    "iron": 0.8,
+    "zinc": 0.6,
+    "selenium": 6
+  },
+  {
+    "food_name": "Chili crab",
+    "category": "Seafood",
+    "kcal": 120,
+    "protein": 14,
+    "fat": 5,
+    "carbs": 6,
+    "sodium": 550,
+    "calcium": 80,
+    "iron": 0.7,
+    "zinc": 2.0,
+    "selenium": 30
+  },
+  {
+    "food_name": "Kaya toast",
+    "category": "Breakfast",
+    "kcal": 280,
+    "protein": 6,
+    "fat": 12,
+    "carbs": 36,
+    "sodium": 320,
+    "calcium": 40,
+    "iron": 1.2,
+    "zinc": 0.5,
+    "selenium": 4
+  },
+  {
+    "food_name": "Roti prata",
+    "category": "Bread",
+    "kcal": 300,
+    "protein": 7,
+    "fat": 12,
+    "carbs": 42,
+    "sodium": 380,
+    "calcium": 30,
+    "iron": 1.5,
+    "zinc": 0.7,
+    "selenium": 5
+  }
+]

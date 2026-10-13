@@ -1,0 +1,16 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+# Raw downloads are large; keep samples + status via scripts
+data/raw/**
+!data/raw/.gitkeep
+!data/raw/**/sample_*.json
+!data/raw/**/README.txt
+data/raw/**/*.zip
+data/raw/**/*.pdf
+__pycache__/
+*.pyc
+.venv/
+agent-tools/

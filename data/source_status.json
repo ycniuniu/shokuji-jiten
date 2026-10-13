@@ -1,0 +1,58 @@
+{
+  "china": {
+    "ok": true,
+    "message": "Downloaded 63 China JSON category files",
+    "count": 63
+  },
+  "japan": {
+    "ok": true,
+    "message": "Downloaded Japan GitHub JSON (1 files)",
+    "count": 1
+  },
+  "korea": {
+    "ok": true,
+    "message": "MFDS portal blocked; curated sample mirror (5 foods)",
+    "count": 5,
+    "note": "best-available sample"
+  },
+  "singapore": {
+    "ok": true,
+    "message": "SG FoodID no bulk API; curated sample mirror (5 foods)",
+    "count": 5,
+    "note": "best-available sample"
+  },
+  "usa": {
+    "ok": true,
+    "message": "USA FDC downloaded 2 dataset(s)",
+    "count": 2
+  },
+  "uk": {
+    "ok": true,
+    "message": "CoFID 2021 xlsx from GOV.UK",
+    "count": 2886
+  },
+  "france": {
+    "ok": true,
+    "message": "Ciqual 2020 XLS from anses.fr",
+    "count": 3186
+  },
+  "germany": {
+    "ok": true,
+    "message": "BLS 4.0 zip from blsdb.de",
+    "count": 7140
+  },
+  "build": {
+    "total": 21585,
+    "by_source": {
+      "china": 1677,
+      "japan": 2478,
+      "korea": 5,
+      "singapore": 5,
+      "usa": 4287,
+      "uk": 2886,
+      "france": 3186,
+      "germany": 7140
+    },
+    "db": "/agent/food-nutrition/data/food.db"
+  }
+}
