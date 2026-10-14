@@ -13,4 +13,6 @@ data/raw/**/*.pdf
 __pycache__/
 *.pyc
 .venv/
+data/name_zh_cache.json
+data/name_zh_cache.json.tmp
 agent-tools/

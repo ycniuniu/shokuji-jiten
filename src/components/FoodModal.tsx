@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { FoodDetail, Mode } from '../types'
+import { foodOriginal, foodTitle, type FoodDetail, type Mode } from '../types'
 
 const COUNTRY: Record<string, string> = {
   CN: '中国',
@@ -106,11 +106,14 @@ export function FoodModal({
             type="button"
             id="food-modal-title"
             className="food-name-btn modal-title-btn"
-            onClick={() => onSpeak(food.name)}
+            onClick={() => onSpeak(foodTitle(food))}
           >
-            {food.name}
+            {foodTitle(food)}
           </button>
-          {food.name_en && <p className="modal-en">{food.name_en}</p>}
+          {foodOriginal(food) && <p className="modal-en">{foodOriginal(food)}</p>}
+          {food.name_en && food.name_en !== foodOriginal(food) && food.name_en !== foodTitle(food) && (
+            <p className="modal-en">{food.name_en}</p>
+          )}
           <p className="food-meta">
             {COUNTRY[food.source_country] || food.source_country}
             {food.category ? ` · ${food.category}` : ''}

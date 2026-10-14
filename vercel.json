@@ -10,7 +10,11 @@
     "api/**/*.ts": {
       "memory": 1024,
       "maxDuration": 15,
-      "includeFiles": "{data/food.db,node_modules/sql.js/dist/**}"
+      "includeFiles": [
+        "data/food.db",
+        "api/_lib/sql-wasm.wasm",
+        "node_modules/sql.js/dist/sql-wasm.wasm"
+      ]
     }
   },
   "headers": [

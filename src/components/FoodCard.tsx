@@ -1,4 +1,4 @@
-import type { FoodListItem, Mode } from '../types'
+import { foodOriginal, foodTitle, type FoodListItem, type Mode } from '../types'
 
 const COUNTRY: Record<string, string> = {
   CN: '中国',
@@ -22,6 +22,8 @@ export function FoodCard({
   onOpen: (id: number) => void
   onSpeak: (name: string) => void
 }) {
+  const title = foodTitle(food)
+  const original = foodOriginal(food)
   const kcal =
     food.kcal_100g != null ? `${Math.round(food.kcal_100g)} kcal/100g` : '—'
 
@@ -29,7 +31,7 @@ export function FoodCard({
     <article className={`food-card mode-${mode}`} onClick={() => onOpen(food.id)}>
       <div className="food-card-image">
         {food.image_path ? (
-          <img src={food.image_path} alt={food.name} loading="lazy" />
+          <img src={food.image_path} alt={title} loading="lazy" />
         ) : (
           <div className="food-card-placeholder" aria-hidden>
             {mode === 'child' ? '🍎' : '食'}
@@ -42,12 +44,13 @@ export function FoodCard({
           className="food-name-btn"
           onClick={(e) => {
             e.stopPropagation()
-            onSpeak(food.name)
+            onSpeak(title)
           }}
           title="朗读名称"
         >
-          {food.name}
+          {title}
         </button>
+        {original && <p className="food-original">{original}</p>}
         <p className="food-meta">
           <span>{COUNTRY[food.source_country] || food.source_country}</span>
           <span className="dot">·</span>

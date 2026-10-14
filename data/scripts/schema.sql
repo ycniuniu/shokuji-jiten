@@ -2,6 +2,8 @@ CREATE TABLE IF NOT EXISTS foods (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   name_en TEXT,
+  name_original TEXT,
+  name_zh TEXT,
   source_country TEXT NOT NULL,
   source_id TEXT,
   category TEXT,

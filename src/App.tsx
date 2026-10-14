@@ -4,9 +4,9 @@ import { FoodCard } from './components/FoodCard'
 import { FoodModal } from './components/FoodModal'
 import { ModeSwitcher } from './components/ModeSwitcher'
 import { useSpeech } from './hooks/useSpeech'
-import type { FoodDetail, FoodListItem, Mode } from './types'
+import { foodTitle, type FoodDetail, type FoodListItem, type Mode } from './types'
 
-const RATE_MSG = '每分钟只能使用五次，超出了五次，等下一分钟再开始'
+const RATE_MSG = '每分钟只能使用十次，超出了十次，等下一分钟再开始'
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('adult')
@@ -59,7 +59,7 @@ export default function App() {
     try {
       const food = await getFood(id)
       setDetail(food)
-      if (mode === 'elder' && voiceOn) speak(food.name)
+      if (mode === 'elder' && voiceOn) speak(foodTitle(food))
     } catch (e) {
       if (e instanceof ApiError && e.status === 429) {
         setError(RATE_MSG)
@@ -108,7 +108,7 @@ export default function App() {
           </div>
           <p className="result-count">
             {loading ? '加载中…' : `共 ${total} 条`}
-            <span className="rate-hint">（接口限流：每分钟 5 次）</span>
+            <span className="rate-hint">（接口限流：每分钟 10 次）</span>
           </p>
           {error && (
             <div className="error-banner" role="alert">

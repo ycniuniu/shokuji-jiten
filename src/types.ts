@@ -4,6 +4,8 @@ export interface FoodListItem {
   id: number
   name: string
   name_en: string | null
+  name_original: string | null
+  name_zh: string | null
   source_country: string
   category: string | null
   kcal_100g: number | null
@@ -33,4 +35,18 @@ export interface FoodDetail extends FoodListItem {
 export interface FoodsResponse {
   total: number
   items: FoodListItem[]
+}
+
+export function foodTitle(food: { name: string; name_zh?: string | null }) {
+  const zh = food.name_zh?.trim()
+  return zh || food.name
+}
+
+export function foodOriginal(food: {
+  name: string
+  name_original?: string | null
+  name_zh?: string | null
+}) {
+  const original = (food.name_original || food.name).trim()
+  return original && original !== foodTitle(food) ? original : null
 }

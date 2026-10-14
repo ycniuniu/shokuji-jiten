@@ -229,6 +229,13 @@ input {
   color: var(--red);
 }
 
+.food-original {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
 .food-meta {
   margin: 0.4rem 0 0;
   color: var(--muted);

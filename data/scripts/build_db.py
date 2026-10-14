@@ -840,7 +840,7 @@ def sample_foods() -> list[dict]:
 
 def insert_foods(conn: sqlite3.Connection, foods: list[dict]) -> int:
     cols = [
-        "name", "name_en", "source_country", "source_id", "category",
+        "name", "name_en", "name_original", "name_zh", "source_country", "source_id", "category",
         "kcal_100g", "protein_g", "fat_g", "carbs_g", "sodium_mg",
         "calcium_mg", "iron_mg", "zinc_mg", "selenium_ug",
         "vitamin_a_ug", "vitamin_c_mg", "vitamin_d_ug", "vitamin_e_mg",
@@ -850,6 +850,9 @@ def insert_foods(conn: sqlite3.Connection, foods: list[dict]) -> int:
     cur = conn.cursor()
     n = 0
     for f in foods:
+        f["name_original"] = f.get("name")
+        if f.get("source_country") == "CN" and not f.get("name_zh"):
+            f["name_zh"] = f.get("name")
         f["image_path"] = match_image(f.get("name") or "", f.get("name_en"))
         if not f.get("serving_ref"):
             f["serving_ref"] = infer_serving(f.get("name") or "", f.get("category"))
