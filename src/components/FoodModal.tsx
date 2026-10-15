@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { creditFor, type PhotoCredit } from '../credits'
 import { foodOriginal, foodTitle, type FoodDetail, type Mode } from '../types'
 
 const COUNTRY: Record<string, string> = {
@@ -44,6 +45,20 @@ export function FoodModal({
 }) {
   const servingG = parseServingGrams(food.serving_ref)
   const [grams, setGrams] = useState(servingG)
+  const [credit, setCredit] = useState<PhotoCredit | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    setCredit(null)
+    if (food.image_path) {
+      creditFor(food.image_path).then((c) => {
+        if (alive) setCredit(c)
+      })
+    }
+    return () => {
+      alive = false
+    }
+  }, [food.image_path])
 
   const scale = grams / 100
   const tip = useMemo(
@@ -101,6 +116,13 @@ export function FoodModal({
             <div className="modal-hero-placeholder">{mode === 'child' ? '🥕' : '食'}</div>
           )}
         </div>
+        {credit && (
+          <p className="photo-credit">
+            <a href={credit.page_url} target="_blank" rel="noopener noreferrer">
+              照片：{credit.author} / {credit.license}
+            </a>
+          </p>
+        )}
         <div className="modal-content">
           <button
             type="button"

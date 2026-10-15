@@ -539,3 +539,16 @@ input {
   font-size: 0.85rem;
   margin: 0.25rem 0 0.75rem;
 }
+
+/* Photo attribution under the modal hero image */
+.photo-credit {
+  margin: 0.35rem 1.5rem 0;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.photo-credit a {
+  color: inherit;
+  text-decoration: underline;
+}

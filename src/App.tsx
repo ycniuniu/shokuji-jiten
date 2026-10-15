@@ -170,6 +170,7 @@ export default function App() {
 
       <footer className="site-footer">
         <p>食事事典 · 营养数据来自多国公开成分表 · 仅供参考</p>
+        <p>食物照片来自 Wikimedia Commons，按各自许可证使用</p>
         <p>成年人轻度活动时，一天大约需要 1800 到 2000 千卡，因人而异，仅供参考。</p>
         <p>1 千卡（kcal）= 1000 卡（cal）。如果要看以「卡」为单位的数，把千卡数乘以 1000 就是。日常说的「卡路里」，多半指的就是千卡。</p>
       </footer>
