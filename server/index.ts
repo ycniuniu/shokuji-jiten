@@ -38,7 +38,7 @@ try {
 }
 
 const listStmt = db.prepare(`
-  SELECT id, name, name_en, name_original, name_zh, source_country, category, kcal_100g, image_path, serving_ref
+  SELECT id, name, name_en, name_original, name_zh, source_country, category, kcal_100g, carbs_g, protein_g, fat_g, image_path, serving_ref
   FROM foods
   WHERE (? = '' OR name LIKE ? OR IFNULL(name_en,'') LIKE ? OR IFNULL(name_zh,'') LIKE ? OR IFNULL(name_original,'') LIKE ? OR IFNULL(category,'') LIKE ?)
   ORDER BY

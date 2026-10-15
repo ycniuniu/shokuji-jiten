@@ -9,15 +9,15 @@ export interface FoodListItem {
   source_country: string
   category: string | null
   kcal_100g: number | null
+  carbs_g: number | null
+  protein_g: number | null
+  fat_g: number | null
   image_path: string | null
   serving_ref: string | null
 }
 
 export interface FoodDetail extends FoodListItem {
   source_id: string | null
-  protein_g: number | null
-  fat_g: number | null
-  carbs_g: number | null
   sodium_mg: number | null
   calcium_mg: number | null
   iron_mg: number | null

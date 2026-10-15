@@ -36,3 +36,9 @@ assert.equal(g(300, null, 10, 25)?.grade, 'yellow')
 assert.equal(g(300)?.fatUpgraded, false)
 
 console.log('grade tests passed')
+
+// list items carry the same macro fields, so cards and modal agree
+const listItem = { kcal_100g: 313, carbs_g: 13, protein_g: 12, fat_g: 25.4 }
+assert.equal(gradeFood(listItem)?.grade, 'red')
+assert.equal(gradeFood(listItem)?.fatUpgraded, true)
+console.log('list/modal consistency test passed')
