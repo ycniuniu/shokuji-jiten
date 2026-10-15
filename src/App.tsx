@@ -172,6 +172,18 @@ export default function App() {
         <p>食事事典 · 营养数据来自多国公开成分表 · 仅供参考</p>
         <p>食物照片来自 Wikimedia Commons，按各自许可证使用</p>
         <p>成年人轻度活动时，一天大约需要 1800 到 2000 千卡，因人而异，仅供参考。</p>
+        <div className="grade-guide">
+          <p className="grade-guide-title">红黄绿灯怎么分</p>
+          <p>
+            按每 100 克热量：<span className="grade-chip grade-green">绿灯</span> 低于 150 千卡；
+            <span className="grade-chip grade-yellow">黄灯</span> 150 到 399 千卡；
+            <span className="grade-chip grade-red">红灯</span> 400 千卡及以上。
+          </p>
+          <p>
+            脂肪升档：脂肪供能占比 = 脂肪克数 × 9 ÷（碳水克数 × 4 + 蛋白克数 × 4 + 脂肪克数 × 9）。绿灯食物热量 ≥ 100 且脂肪供能占比 ≥ 50% 升为黄灯；黄灯食物热量 ≥ 250 且脂肪供能占比 ≥ 50% 升为红灯。最多升一档，缺少营养素数据时不升档。
+          </p>
+          <p>只看热量和脂肪，不代表营养好坏，糖尿病等特殊饮食请听医生建议。</p>
+        </div>
         <p>1 千卡（kcal）= 1000 卡（cal）。如果要看以「卡」为单位的数，把千卡数乘以 1000 就是。日常说的「卡路里」，多半指的就是千卡。</p>
       </footer>
 

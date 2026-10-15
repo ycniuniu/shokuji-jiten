@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { creditFor, type PhotoCredit } from '../credits'
-import { foodGrade, GRADE_LABEL, type LightGrade } from '../grade'
+import { gradeFood, GRADE_LABEL, type LightGrade } from '../grade'
 import { foodTitle, type FoodDetail, type Mode } from '../types'
 
 const KJ_PER_KCAL = 4.184
@@ -109,7 +109,8 @@ export function FoodModal({
   const kcal = num(food.kcal_100g)
   const kj = kcal == null ? null : Math.round(kcal * KJ_PER_KCAL)
   const rings = macroRings(food)
-  const grade = foodGrade(food)
+  const graded = gradeFood(food)
+  const grade = graded?.grade ?? null
   const title = foodTitle(food)
 
   const rows = [
@@ -169,6 +170,7 @@ export function FoodModal({
               {title}
             </button>
             {grade && <GradeBadge grade={grade} />}
+            {graded?.fatUpgraded && <span className="grade-note">脂肪占比高</span>}
           </div>
 
           <div className="energy-hero">

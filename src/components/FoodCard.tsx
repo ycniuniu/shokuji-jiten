@@ -1,5 +1,5 @@
 import { foodOriginal, foodTitle, type FoodListItem, type Mode } from '../types'
-import { foodGrade, GRADE_LABEL } from '../grade'
+import { gradeFood, GRADE_LABEL } from '../grade'
 
 const COUNTRY: Record<string, string> = {
   CN: '中国',
@@ -27,7 +27,7 @@ export function FoodCard({
   const original = foodOriginal(food)
   const kcal =
     food.kcal_100g != null ? `${Math.round(food.kcal_100g)} 千卡/100g` : '—'
-  const grade = foodGrade(food)
+  const grade = gradeFood(food)?.grade ?? null
 
   return (
     <article className={`food-card mode-${mode}`} onClick={() => onOpen(food.id)}>

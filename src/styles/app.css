@@ -745,3 +745,26 @@ input {
     height: 64px;
   }
 }
+
+/* Fat-upgrade note and footer grade guide */
+.grade-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.grade-guide {
+  max-width: 640px;
+  margin: 0.75rem auto;
+  text-align: left;
+  line-height: 1.7;
+}
+
+.site-footer .grade-guide p {
+  margin: 0.3rem 0;
+}
+
+.site-footer .grade-guide .grade-guide-title {
+  font-weight: 600;
+  color: var(--ink);
+}
