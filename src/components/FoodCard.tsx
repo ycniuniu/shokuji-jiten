@@ -25,7 +25,7 @@ export function FoodCard({
   const title = foodTitle(food)
   const original = foodOriginal(food)
   const kcal =
-    food.kcal_100g != null ? `${Math.round(food.kcal_100g)} kcal/100g` : '—'
+    food.kcal_100g != null ? `${Math.round(food.kcal_100g)} 千卡/100g` : '—'
 
   return (
     <article className={`food-card mode-${mode}`} onClick={() => onOpen(food.id)}>

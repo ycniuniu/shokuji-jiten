@@ -52,7 +52,7 @@ export function FoodModal({
   )
 
   const rows: { label: string; value: number | null; unit: string }[] = [
-    { label: '能量', value: food.kcal_100g, unit: ' kcal' },
+    { label: '能量', value: food.kcal_100g, unit: ' 千卡' },
     { label: '蛋白质', value: food.protein_g, unit: ' g' },
     { label: '脂肪', value: food.fat_g, unit: ' g' },
     { label: '碳水化合物', value: food.carbs_g, unit: ' g' },
@@ -163,6 +163,8 @@ export function FoodModal({
               ))}
             </tbody>
           </table>
+
+          <p className="footnote">成年人轻度活动时，一天大约需要 1800 到 2000 千卡，因人而异，仅供参考。</p>
 
           {showDetailed && mode === 'adult' && (
             <p className="footnote">数值均以每 100 g 可食部为基准换算；微量元素缺测显示为 —。</p>
