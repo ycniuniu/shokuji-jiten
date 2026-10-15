@@ -1,35 +1,83 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { creditFor, type PhotoCredit } from '../credits'
-import { foodOriginal, foodTitle, type FoodDetail, type Mode } from '../types'
+import { foodGrade, GRADE_LABEL, type LightGrade } from '../grade'
+import { foodTitle, type FoodDetail, type Mode } from '../types'
 
-const COUNTRY: Record<string, string> = {
-  CN: '中国',
-  JP: '日本',
-  KR: '韩国',
-  SG: '新加坡',
-  US: '美国',
-  UK: '英国',
-  FR: '法国',
-  DE: '德国',
+const KJ_PER_KCAL = 4.184
+
+// GB 28050-2011 表 A.1 营养素参考值（NRV）
+// 出处：卫计委发布的《食品安全国家标准 预包装食品营养标签通则》GB 28050-2011 附录 A 表 A.1
+const NRV = {
+  energy_kj: 8400,
+  protein_g: 60,
+  fat_g: 60,
+  carbs_g: 300,
+  sodium_mg: 2000,
 }
 
-function fmt(n: number | null | undefined, unit = '') {
-  if (n == null || Number.isNaN(n)) return '—'
-  const v = Math.round(n * 100) / 100
-  return `${v}${unit}`
+function num(n: number | null | undefined): number | null {
+  return n == null || Number.isNaN(n) ? null : n
 }
 
-const CHILD_TIPS = [
-  '蛋白质帮你长高长壮，像小超人加油！',
-  '蔬菜水果里有维生素 C，保护身体小卫士。',
-  '少吃太咸的食物，心脏会更开心哦。',
-  '每餐吃得彩虹一点：红黄绿都尝一尝。',
-]
+function fmt(n: number) {
+  return `${Math.round(n * 10) / 10}`
+}
 
-function parseServingGrams(ref: string | null): number {
-  if (!ref) return 100
-  const m = ref.match(/(\d+(?:\.\d+)?)\s*(?:g|克|ml|毫升)/i)
-  return m ? Number(m[1]) : 100
+type Ring = { key: string; label: string; share: number; color: string }
+
+function macroRings(food: FoodDetail): Ring[] {
+  const parts = [
+    { key: 'carbs', label: '碳水', g: num(food.carbs_g), per: 4, color: 'var(--ring-carbs)' },
+    { key: 'protein', label: '蛋白质', g: num(food.protein_g), per: 4, color: 'var(--ring-protein)' },
+    { key: 'fat', label: '脂肪', g: num(food.fat_g), per: 9, color: 'var(--ring-fat)' },
+  ]
+  if (parts.some((p) => p.g == null)) return []
+  const kcal = parts.map((p) => (p.g as number) * p.per)
+  const total = kcal.reduce((a, b) => a + b, 0)
+  if (total <= 0) return []
+  return parts.map((p, i) => ({
+    key: p.key,
+    label: p.label,
+    share: kcal[i] / total,
+    color: p.color,
+  }))
+}
+
+function RingChart({ ring }: { ring: Ring }) {
+  const r = 26
+  const c = 2 * Math.PI * r
+  const pct = Math.round(ring.share * 100)
+  return (
+    <figure className="macro-ring">
+      <svg viewBox="0 0 64 64" width="72" height="72" role="img" aria-label={`${ring.label}供能 ${pct}%`}>
+        <circle cx="32" cy="32" r={r} fill="none" stroke="var(--line)" strokeWidth="6" />
+        <circle
+          cx="32"
+          cy="32"
+          r={r}
+          fill="none"
+          stroke={ring.color}
+          strokeWidth="6"
+          strokeDasharray={`${c * ring.share} ${c}`}
+          strokeLinecap="round"
+          transform="rotate(-90 32 32)"
+        />
+        <text x="32" y="36" textAnchor="middle" className="macro-ring-pct">
+          {pct}%
+        </text>
+      </svg>
+      <figcaption>{ring.label}供能</figcaption>
+    </figure>
+  )
+}
+
+function GradeBadge({ grade }: { grade: LightGrade }) {
+  return (
+    <span className={`grade-badge grade-${grade}`}>
+      <span className="grade-dot" aria-hidden />
+      {GRADE_LABEL[grade]}
+    </span>
+  )
 }
 
 export function FoodModal({
@@ -43,8 +91,6 @@ export function FoodModal({
   onClose: () => void
   onSpeak: (name: string) => void
 }) {
-  const servingG = parseServingGrams(food.serving_ref)
-  const [grams, setGrams] = useState(servingG)
   const [credit, setCredit] = useState<PhotoCredit | null>(null)
 
   useEffect(() => {
@@ -60,42 +106,31 @@ export function FoodModal({
     }
   }, [food.image_path])
 
-  const scale = grams / 100
-  const tip = useMemo(
-    () => CHILD_TIPS[food.id % CHILD_TIPS.length],
-    [food.id],
-  )
+  const kcal = num(food.kcal_100g)
+  const kj = kcal == null ? null : Math.round(kcal * KJ_PER_KCAL)
+  const rings = macroRings(food)
+  const grade = foodGrade(food)
+  const title = foodTitle(food)
 
-  const rows: { label: string; value: number | null; unit: string }[] = [
-    { label: '能量', value: food.kcal_100g, unit: ' 千卡' },
-    { label: '蛋白质', value: food.protein_g, unit: ' g' },
-    { label: '脂肪', value: food.fat_g, unit: ' g' },
-    { label: '碳水化合物', value: food.carbs_g, unit: ' g' },
-    { label: '钠', value: food.sodium_mg, unit: ' mg' },
-    { label: '钙', value: food.calcium_mg, unit: ' mg' },
-    { label: '铁', value: food.iron_mg, unit: ' mg' },
-    { label: '锌', value: food.zinc_mg, unit: ' mg' },
-    { label: '硒', value: food.selenium_ug, unit: ' µg' },
-    { label: '维生素 A', value: food.vitamin_a_ug, unit: ' µg' },
-    { label: '维生素 C', value: food.vitamin_c_mg, unit: ' mg' },
-    { label: '维生素 D', value: food.vitamin_d_ug, unit: ' µg' },
-    { label: '维生素 E', value: food.vitamin_e_mg, unit: ' mg' },
-    { label: '维生素 B1', value: food.vitamin_b1_mg, unit: ' mg' },
-    { label: '维生素 B2', value: food.vitamin_b2_mg, unit: ' mg' },
-    { label: '维生素 B3', value: food.vitamin_b3_mg, unit: ' mg' },
+  const rows = [
+    { label: '能量', value: kcal, unit: '千卡', denom: null as number | null, energyPct: kj },
+    { label: '蛋白质', value: num(food.protein_g), unit: '克', denom: NRV.protein_g, energyPct: null },
+    { label: '脂肪', value: num(food.fat_g), unit: '克', denom: NRV.fat_g, energyPct: null },
+    { label: '碳水化合物', value: num(food.carbs_g), unit: '克', denom: NRV.carbs_g, energyPct: null },
+    { label: '钠', value: num(food.sodium_mg), unit: '毫克', denom: NRV.sodium_mg, energyPct: null },
   ]
-
-  const showDetailed = mode === 'adult' || mode === 'elder'
-  const displayRows =
-    mode === 'elder'
-      ? rows.filter((r) =>
-          ['能量', '蛋白质', '脂肪', '碳水化合物', '钠', '钙', '铁'].includes(r.label),
-        )
-      : mode === 'child'
-        ? rows.filter((r) =>
-            ['能量', '蛋白质', '脂肪', '碳水化合物', '维生素 C'].includes(r.label),
-          )
-        : rows
+    .filter((r) => r.value != null)
+    .map((r) => ({
+      label: r.label,
+      value: r.value as number,
+      unit: r.unit,
+      pct:
+        r.label === '能量'
+          ? r.energyPct == null
+            ? null
+            : Math.round((r.energyPct / NRV.energy_kj) * 100)
+          : Math.round(((r.value as number) / (r.denom as number)) * 100),
+    }))
 
   return (
     <div className="modal-backdrop" onClick={onClose} role="presentation">
@@ -111,7 +146,7 @@ export function FoodModal({
         </button>
         <div className="modal-hero">
           {food.image_path ? (
-            <img src={food.image_path} alt="" />
+            <img src={food.image_path} alt={title} />
           ) : (
             <div className="modal-hero-placeholder">{mode === 'child' ? '🥕' : '食'}</div>
           )}
@@ -124,72 +159,61 @@ export function FoodModal({
           </p>
         )}
         <div className="modal-content">
-          <button
-            type="button"
-            id="food-modal-title"
-            className="food-name-btn modal-title-btn"
-            onClick={() => onSpeak(foodTitle(food))}
-          >
-            {foodTitle(food)}
-          </button>
-          {foodOriginal(food) && <p className="modal-en">{foodOriginal(food)}</p>}
-          {food.name_en && food.name_en !== foodOriginal(food) && food.name_en !== foodTitle(food) && (
-            <p className="modal-en">{food.name_en}</p>
-          )}
-          <p className="food-meta">
-            {COUNTRY[food.source_country] || food.source_country}
-            {food.category ? ` · ${food.category}` : ''}
-          </p>
-
-          <div className="serving-box">
-            <label htmlFor="serving-grams">常见份量换算</label>
-            <p className="serving-ref">{food.serving_ref || '按每 100 g 基准'}</p>
-            <div className="serving-controls">
-              <input
-                id="serving-grams"
-                type="range"
-                min={10}
-                max={500}
-                step={5}
-                value={grams}
-                onChange={(e) => setGrams(Number(e.target.value))}
-              />
-              <span className="serving-value">{grams} g</span>
-            </div>
+          <div className="modal-title-row">
+            <button
+              type="button"
+              id="food-modal-title"
+              className="food-name-btn modal-title-btn"
+              onClick={() => onSpeak(title)}
+            >
+              {title}
+            </button>
+            {grade && <GradeBadge grade={grade} />}
           </div>
 
-          {mode === 'child' && (
-            <div className="child-tip">
-              <span className="child-tip-icon" aria-hidden>
-                ⭐
-              </span>
-              <p>{tip}</p>
+          <div className="energy-hero">
+            {kcal == null ? (
+              <p className="energy-missing">暂无热量数据</p>
+            ) : (
+              <>
+                <p className="energy-main">
+                  <strong>{Math.round(kcal)}</strong>
+                  <span className="energy-unit">千卡</span>
+                </p>
+                <p className="energy-sub">每 100 克 · {kj} 千焦</p>
+              </>
+            )}
+          </div>
+
+          {rings.length > 0 && (
+            <div className="macro-rings" aria-label="三大营养素供能占比">
+              {rings.map((r) => (
+                <RingChart key={r.key} ring={r} />
+              ))}
             </div>
           )}
 
-          <table className="nutrient-table">
-            <thead>
-              <tr>
-                <th>营养素</th>
-                <th>每 100 g</th>
-                <th>当前份量</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayRows.map((r) => (
-                <tr key={r.label}>
-                  <td>{r.label}</td>
-                  <td>{fmt(r.value, r.unit)}</td>
-                  <td>{r.value == null ? '—' : fmt(r.value * scale, r.unit)}</td>
+          {rows.length > 0 && (
+            <table className="nutrient-table nutrient-table-compact">
+              <thead>
+                <tr>
+                  <th>营养素</th>
+                  <th>每 100 克</th>
+                  <th>占每日参考</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <p className="footnote">成年人轻度活动时，一天大约需要 1800 到 2000 千卡，因人而异，仅供参考。</p>
-
-          {showDetailed && mode === 'adult' && (
-            <p className="footnote">数值均以每 100 g 可食部为基准换算；微量元素缺测显示为 —。</p>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.label}>
+                    <td>{r.label}</td>
+                    <td>
+                      {fmt(r.value)} {r.unit}
+                    </td>
+                    <td>{r.pct == null ? '—' : `${r.pct}%`}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </div>

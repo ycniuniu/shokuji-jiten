@@ -1,7 +1,7 @@
 :root {
-  --bg: #fafafa;
-  --ink: #111;
-  --muted: #555;
+  --bg: #f7f5f2;
+  --ink: #2c2926;
+  --muted: #6b6560;
   --line: #e5e5e5;
   --red: #c41e3a;
   --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -416,10 +416,10 @@ input {
 
 /* Mode: Elder — max contrast, largest type */
 .app.mode-elder {
-  --bg: #fff;
-  --ink: #000;
-  --muted: #222;
-  --line: #000;
+  --bg: #faf8f5;
+  --ink: #1f1c1a;
+  --muted: #4a453f;
+  --line: #3a3530;
   --fs-base: 20px;
   --fs-title: 2.6rem;
   --fs-card: 1.45rem;
@@ -551,4 +551,197 @@ input {
 .photo-credit a {
   color: inherit;
   text-decoration: underline;
+}
+
+/* === modal energy + grade theme === */
+:root {
+  --ring-carbs: #8a847c;
+  --ring-protein: #4a453f;
+  --ring-fat: #8b3a3a;
+  --grade-green: #3d5c45;
+  --grade-green-soft: #e8efe9;
+  --grade-green-ink: #2f4536;
+  --grade-yellow: #b08a3c;
+  --grade-yellow-soft: #f5efdf;
+  --grade-yellow-ink: #5c4a22;
+  --grade-red: #8b3a3a;
+  --grade-red-soft: #f3e8e7;
+  --grade-red-ink: #5c2e2c;
+}
+
+.modal-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.modal-title-btn {
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 1px 2px rgba(44, 41, 38, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent), var(--grade-green-soft);
+  color: var(--grade-green-ink);
+}
+
+.grade-badge .grade-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.45), transparent 55%), var(--grade-green);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.grade-badge.grade-yellow {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent), var(--grade-yellow-soft);
+  color: var(--grade-yellow-ink);
+}
+.grade-badge.grade-yellow .grade-dot {
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.45), transparent 55%), var(--grade-yellow);
+}
+.grade-badge.grade-red {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent), var(--grade-red-soft);
+  color: var(--grade-red-ink);
+}
+.grade-badge.grade-red .grade-dot {
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.4), transparent 55%), var(--grade-red);
+}
+
+.grade-chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--grade-green-ink);
+}
+.grade-chip.grade-yellow { color: var(--grade-yellow-ink); }
+.grade-chip.grade-red { color: var(--grade-red-ink); }
+
+.energy-hero {
+  margin: 1.1rem 0 0.35rem;
+  padding: 1.15rem 0 1.05rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.energy-main {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.energy-main strong {
+  font-family: "SF Mono", ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+  font-size: 3.15rem;
+  line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.energy-unit {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.energy-sub,
+.energy-missing {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.macro-rings {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.75rem;
+  margin: 1.35rem 0 0.5rem;
+}
+
+.macro-ring {
+  margin: 0;
+  text-align: center;
+}
+
+.macro-ring figcaption {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
+.macro-ring-pct {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--ink);
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+.nutrient-table {
+  margin-top: 1.1rem;
+}
+
+.nutrient-table th,
+.nutrient-table td {
+  padding: 0.7rem 0.45rem;
+  line-height: 1.45;
+}
+
+.nutrient-table-compact th:not(:first-child),
+.nutrient-table-compact td:not(:first-child) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Keep phoenix badge crisp and untouched */
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+@media (max-width: 640px) {
+  .modal-backdrop {
+    padding: 0;
+    place-items: end stretch;
+  }
+  .modal {
+    width: 100%;
+    max-height: 94vh;
+    border-radius: 12px 12px 0 0;
+  }
+  .modal-content {
+    padding: 1rem 1.1rem 1.6rem;
+  }
+  .modal-title-btn {
+    font-size: 1.4rem;
+  }
+  .energy-main strong {
+    font-size: 2.55rem;
+  }
+  .macro-rings {
+    gap: 0.35rem;
+  }
+  .macro-ring svg {
+    width: 64px;
+    height: 64px;
+  }
 }
