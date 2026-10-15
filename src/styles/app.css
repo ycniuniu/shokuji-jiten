@@ -520,3 +520,22 @@ input {
     font-size: 2rem;
   }
 }
+
+/* Basal metabolism reference table */
+.bmr-ref {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.bmr-ref h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.bmr-intro,
+.bmr-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.75rem;
+}

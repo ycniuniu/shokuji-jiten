@@ -8,6 +8,17 @@ import { foodTitle, type FoodDetail, type FoodListItem, type Mode } from './type
 
 const RATE_MSG = '每分钟只能使用十次，超出了十次，等下一分钟再开始'
 
+
+const BMR_ROWS: [string, number, number][] = [
+  ['儿童 6–7 岁', 980, 920],
+  ['儿童 10–11 岁', 1330, 1260],
+  ['成年人 18–29 岁', 1490, 1130],
+  ['成年人 30–49 岁', 1570, 1170],
+  ['成年人 50–64 岁', 1510, 1120],
+  ['老人 65–74 岁', 1390, 1090],
+  ['老人 75 岁以上', 1310, 1020],
+]
+
 export default function App() {
   const [mode, setMode] = useState<Mode>('adult')
   const [voiceOn, setVoiceOn] = useState(false)
@@ -132,6 +143,30 @@ export default function App() {
           )}
         </section>
       </main>
+
+      <section className="bmr-ref" aria-labelledby="bmr-title">
+        <h2 id="bmr-title">基础代谢参考值</h2>
+        <p className="bmr-intro">完全静息、一动不动时，一天大约消耗的热量（千卡/天）</p>
+        <table className="nutrient-table bmr-table">
+          <thead>
+            <tr>
+              <th>年龄段</th>
+              <th>男</th>
+              <th>女</th>
+            </tr>
+          </thead>
+          <tbody>
+            {BMR_ROWS.map(([age, male, female]) => (
+              <tr key={age}>
+                <td>{age}</td>
+                <td>{male.toLocaleString()} 千卡</td>
+                <td>{female.toLocaleString()} 千卡</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="bmr-note">个人差异大，仅供参考</p>
+      </section>
 
       <footer className="site-footer">
         <p>食事事典 · 营养数据来自多国公开成分表 · 仅供参考</p>
