@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { RATE_LIMIT, RATE_MSG, RATE_WINDOW_MS } from './constants'
+import { RATE_LIMIT, RATE_MSG, RATE_WINDOW_MS } from './constants.js'
 
 type Bucket = { count: number; resetAt: number }
 

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { searchFoods } from '../_lib/db'
-import { withRateLimit } from '../_lib/rateLimit'
+import { searchFoods } from '../_lib/db.js'
+import { withRateLimit } from '../_lib/rateLimit.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
