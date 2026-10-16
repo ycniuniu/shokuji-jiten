@@ -11,7 +11,7 @@
     "build:check": "tsc -b && vite build",
     "start": "NODE_ENV=production tsx server/index.ts",
     "lint": "oxlint",
-    "test": "tsx tests/grade.test.ts",
+    "test": "tsx tests/grade.test.ts && tsx tests/nutrients.test.ts",
     "preview": "vite preview",
     "build:db": "python3 data/scripts/build_db.py",
     "download:data": "python3 data/scripts/download_sources.py"

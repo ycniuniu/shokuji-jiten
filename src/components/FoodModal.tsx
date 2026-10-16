@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { creditFor, type PhotoCredit } from '../credits'
+import { allNutrients } from '../nutrients'
 import { gradeFood, GRADE_LABEL, type LightGrade } from '../grade'
 import { foodTitle, type FoodDetail, type Mode } from '../types'
 
@@ -112,6 +113,7 @@ export function FoodModal({
   const graded = gradeFood(food)
   const grade = graded?.grade ?? null
   const title = foodTitle(food)
+  const fullRows = allNutrients(food)
 
   const rows = [
     { label: '能量', value: kcal, unit: '千卡', denom: null as number | null, energyPct: kj },
@@ -216,6 +218,34 @@ export function FoodModal({
                 ))}
               </tbody>
             </table>
+          )}
+          {fullRows.length > 0 && (
+            <section className="nutrient-full" aria-labelledby="nutrient-full-title">
+              <h3 id="nutrient-full-title" className="nutrient-full-title">
+                全部营养素 <span>每 100 克 · 共 {fullRows.length} 项</span>
+              </h3>
+              <div className="nutrient-full-scroll" tabIndex={0}>
+                <table className="nutrient-table nutrient-table-compact nutrient-table-full">
+                  <thead>
+                    <tr>
+                      <th>营养素</th>
+                      <th>每 100 克</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fullRows.map((r) => (
+                      <tr key={r.key}>
+                        <td>{r.label}</td>
+                        <td>
+                          {r.value}
+                          {r.unit ? ` ${r.unit}` : ''}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
           )}
         </div>
       </div>

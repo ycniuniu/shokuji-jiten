@@ -768,3 +768,66 @@ input {
   font-weight: 600;
   color: var(--ink);
 }
+
+/* Full nutrient list: fixed-height scroll area */
+.nutrient-full {
+  margin-top: 1.6rem;
+}
+
+.nutrient-full-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.nutrient-full-title span {
+  margin-left: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.nutrient-full-scroll {
+  height: 300px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfaf8;
+}
+
+.nutrient-full-scroll:focus-visible {
+  outline: 2px solid var(--muted);
+  outline-offset: 2px;
+}
+
+.nutrient-table-full {
+  margin-top: 0;
+}
+
+.nutrient-table-full thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f3f1ed;
+}
+
+.nutrient-table-full td:last-child {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.food-meta .grade-chip {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .nutrient-full-scroll {
+    height: 260px;
+  }
+}

@@ -30,6 +30,7 @@ export interface FoodDetail extends FoodListItem {
   vitamin_b1_mg: number | null
   vitamin_b2_mg: number | null
   vitamin_b3_mg: number | null
+  raw_json?: string | null
 }
 
 export interface FoodsResponse {
