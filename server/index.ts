@@ -15,11 +15,11 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const RATE_MSG = '每分钟只能使用十次，超出了十次，等下一分钟再开始'
+const RATE_MSG = '请求太频繁了，请过几秒再试一次。'
 
 const apiLimiter = rateLimit({
   windowMs: 60_000,
-  max: 10,
+  max: 120,
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, res) => {

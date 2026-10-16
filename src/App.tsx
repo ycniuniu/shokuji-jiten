@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-import { ApiError, getFood, searchFoods } from './api'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ApiError, getFood, RATE_MSG, searchFoods } from './api'
 import { FoodCard } from './components/FoodCard'
 import { FoodModal } from './components/FoodModal'
 import { ModeSwitcher } from './components/ModeSwitcher'
 import { useSpeech } from './hooks/useSpeech'
 import { foodTitle, type FoodDetail, type FoodListItem, type Mode } from './types'
 
-const RATE_MSG = '每分钟只能使用十次，超出了十次，等下一分钟再开始'
+const SEARCH_DEBOUNCE_MS = 350
 
 
 const BMR_ROWS: [string, number, number][] = [
@@ -30,34 +30,52 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [detail, setDetail] = useState<FoodDetail | null>(null)
 
+  const [composing, setComposing] = useState(false)
+  const abortRef = useRef<AbortController | null>(null)
+
   const { speak } = useSpeech(mode, voiceOn)
 
+  // Debounce, and wait while an IME (e.g. pinyin) is still composing.
   useEffect(() => {
-    const t = setTimeout(() => setDebounced(query.trim()), 350)
+    if (composing) return
+    const t = setTimeout(() => setDebounced(query.trim()), SEARCH_DEBOUNCE_MS)
     return () => clearTimeout(t)
-  }, [query])
+  }, [query, composing])
 
   useEffect(() => {
     if (mode === 'elder') setVoiceOn(true)
   }, [mode])
 
   const load = useCallback(async (q: string) => {
+    abortRef.current?.abort()
+    if (!q) {
+      abortRef.current = null
+      setItems([])
+      setTotal(0)
+      setError(null)
+      setLoading(false)
+      return
+    }
+    const ctrl = new AbortController()
+    abortRef.current = ctrl
     setLoading(true)
     setError(null)
     try {
-      const data = await searchFoods(q, 0, 36)
+      const data = await searchFoods(q, 0, 36, {
+        signal: ctrl.signal,
+        onRetry: () => setError(RATE_MSG),
+      })
+      if (ctrl.signal.aborted) return
+      setError(null)
       setItems(data.items)
       setTotal(data.total)
     } catch (e) {
-      if (e instanceof ApiError && e.status === 429) {
-        setError(RATE_MSG)
-      } else {
-        setError(e instanceof Error ? e.message : '加载失败')
-      }
+      if (ctrl.signal.aborted || (e instanceof DOMException && e.name === 'AbortError')) return
+      setError(e instanceof Error ? e.message : '加载失败')
       setItems([])
       setTotal(0)
     } finally {
-      setLoading(false)
+      if (abortRef.current === ctrl) setLoading(false)
     }
   }, [])
 
@@ -68,15 +86,18 @@ export default function App() {
   const openDetail = async (id: number) => {
     setError(null)
     try {
-      const food = await getFood(id)
+      const food = await getFood(id, () => setError(RATE_MSG))
+      setError(null)
       setDetail(food)
       if (mode === 'elder' && voiceOn) speak(foodTitle(food))
     } catch (e) {
-      if (e instanceof ApiError && e.status === 429) {
-        setError(RATE_MSG)
-      } else {
-        setError(e instanceof Error ? e.message : '加载详情失败')
-      }
+      setError(
+        e instanceof ApiError && e.status === 429
+          ? e.message
+          : e instanceof Error
+            ? e.message
+            : '加载详情失败',
+      )
     }
   }
 
@@ -106,6 +127,11 @@ export default function App() {
               placeholder="搜索食物名称…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onCompositionStart={() => setComposing(true)}
+              onCompositionEnd={(e) => {
+                setComposing(false)
+                setQuery(e.currentTarget.value)
+              }}
               aria-label="搜索食物"
             />
             <label className="voice-toggle">
@@ -118,8 +144,7 @@ export default function App() {
             </label>
           </div>
           <p className="result-count">
-            {loading ? '加载中…' : `共 ${total} 条`}
-            <span className="rate-hint">（接口限流：每分钟 10 次）</span>
+            {loading ? '加载中…' : debounced ? `共 ${total} 条` : '输入食物名称开始搜索'}
           </p>
           {error && (
             <div className="error-banner" role="alert">
@@ -138,7 +163,7 @@ export default function App() {
               onSpeak={speak}
             />
           ))}
-          {!loading && items.length === 0 && !error && (
+          {!loading && debounced && items.length === 0 && !error && (
             <p className="empty">没有找到食物，换个关键词试试。</p>
           )}
         </section>
